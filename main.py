@@ -1,30 +1,40 @@
-# python3
-
 def parallel_processing(n, m, data):
     output = []
-    # TODO: write the function for simulating parallel tasks, 
-    # create the output pairs
 
+    # Initialize threads and finish times
+    threads = [0] * n
+    finish_times = [0] * n
+    
+    # Process the jobs
+    for i in range(m):
+        job_time = data[i]
+        
+        # Choose the earliest available thread
+        min_finish_time = min(finish_times)
+        thread_index = finish_times.index(min_finish_time)
+        
+        # Update the thread's finish time
+        start_time = max(threads[thread_index], finish_times[thread_index])
+        finish_times[thread_index] = start_time + job_time
+        threads[thread_index] = start_time
+        
+        # Add the job details to the output
+        output.append((thread_index, start_time))
+    
     return output
 
+
 def main():
-    # TODO: create input from keyboard
-    # input consists of two lines
-    # first line - n and m
-    # n - thread count 
-    # m - job count
-    n = 0
-    m = 0
+    # Read input
+    n, m = map(int, input().split())
+    data = list(map(int, input().split()))
 
-    # second line - data 
-    # data - contains m integers t(i) - the times in seconds it takes any thread to process i-th job
-    data = []
-
-    # TODO: create the function
-    result = parallel_processing(n,m,data)
+    # Call the parallel_processing function
+    result = parallel_processing(n, m, data)
     
-    # TODO: print out the results, each pair in it's own line
-
+    # Print the output
+    for pair in result:
+        print(pair[0], pair[1])
 
 
 if __name__ == "__main__":
